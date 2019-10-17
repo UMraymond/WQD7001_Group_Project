@@ -1,17 +1,17 @@
 ## server.R
 
 library(shiny)
-library(tidyverse) ; library(httr) ; library(jsonlite); library(glue)
+library(tidyverse) ; library(httr) ; library(jsonlite); library(glue); library(ggplot2); library(plotly)
 require("httr")
 
 shinyServer(function(input, output){
-  output$currencyPlot <- renderPlot({
+  output$currencyPlot <- renderPlotly({
     
     
-    year = "2019"
+    year = format(Sys.Date(), "%Y")
     currency_code = input$chosen
-    month = "3"
-    session = c("0900", "1130", "1200", "1700")
+    month = format(Sys.Date(), "%m")
+    session = "1700"
     
     
     path = paste0("https://api.bnm.gov.my/public/exchange-rate/", currency_code, "/", "year/",  year, "/", "month/", month)
@@ -35,8 +35,8 @@ shinyServer(function(input, output){
     df <- df[order(df$date),]
     #head(df)
     
-    ggplot(df, aes(x=date, y=selling, group =1)) + geom_line() + geom_point() + geom_smooth(method='lm',formula=y~x) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle(paste(as.character(df$currency[1]), "/MYR currency", sep = "")) +
+    p1 <- ggplot(df, aes(x=date, y=buying, group =1)) + geom_line() + geom_point() + geom_smooth(method='lm',formula=y~x) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle(paste(as.character(df$currency[1]), "/MYR currency", sep = "")) +
       theme(plot.title = element_text(hjust = 0.5))
-    
-  }, height = 500, width = 800)
+    ggplotly(p1) %>% layout(height = 500, width = 800)
+  })
 })
