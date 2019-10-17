@@ -9,7 +9,7 @@ shinyUI(fluidPage(
   sidebarLayout(
     sidebarPanel(
       
-      selectInput("chosen", label = "Currency Choice", choices = c("USD", "EUR"), selected = "USD", multiple = FALSE),
+      selectInput("chosen", label = "Currency Choice", choices = c("USD", "EUR", "RMB"), selected = "USD", multiple = FALSE),
       br(),
       p(strong("Data Set Info:"), "From", code("BNM API"), "online"),
       p("Past 30 days of selected currency with MYR currency.")
