@@ -29,13 +29,13 @@ shinyServer(function(input, output){
     df <- select(df,
                  date = data.rate.date, 
                  currency = data.currency_code, 
-                 buying = data.rate.buying_rate,
-                 selling = data.rate.selling_rate)
+                 Buying = data.rate.buying_rate,
+                 Selling = data.rate.selling_rate)
     
     df <- df[order(df$date),]
     #head(df)
     
-    p1 <- ggplot(df, aes(x=date, y=buying, group =1)) + geom_line() + geom_point() + geom_smooth(method='lm',formula=y~x) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle(paste(as.character(df$currency[1]), "/MYR currency", sep = "")) +
+    p1 <- ggplot(df, aes_string(x="date", y=input$type, group =1)) + geom_line() + geom_point() + geom_smooth(method='lm',formula=y~x) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle(paste(as.character(df$currency[1]), "/MYR currency", sep = "")) +
       theme(plot.title = element_text(hjust = 0.5))
     ggplotly(p1) %>% layout(height = 500, width = 800)
   })
