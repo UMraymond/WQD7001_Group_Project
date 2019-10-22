@@ -7,14 +7,17 @@ require("httr")
 shinyServer(function(input, output){
   output$currencyPlot <- renderPlotly({
     
-    
+    x = as.numeric(format(Sys.Date(), "%m"))
     year = format(Sys.Date(), "%Y")
     currency_code = input$chosen
-    month = format(Sys.Date(), "%m")
+    month = list(x, x-1)
     session = "1700"
     
+    df = data.frame()
     
-    path = paste0("https://api.bnm.gov.my/public/exchange-rate/", currency_code, "/", "year/",  year, "/", "month/", month)
+    for (i in seq(1,2,1)){
+    
+    path = paste0("https://api.bnm.gov.my/public/exchange-rate/", currency_code, "/", "year/",  year, "/", "month/", month[i])
     
     response = GET(path, session = session, 
                    accept("application/vnd.BNM.API.v1+json"),
@@ -23,8 +26,10 @@ shinyServer(function(input, output){
     response <- content(response, as = "text", encoding = "UTF-8")
     #response
     
-    df <- fromJSON(response, flatten = TRUE) %>% 
+    df1 <- fromJSON(response, flatten = TRUE) %>% 
       data.frame()
+    df <- rbind(df,df1)
+    }
     
     df <- select(df,
                  date = data.rate.date, 
