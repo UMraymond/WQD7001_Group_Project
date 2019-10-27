@@ -9,7 +9,7 @@ shinyUI(fluidPage(
   sidebarLayout(
     sidebarPanel(
       
-      selectInput("chosen", label = h3("Currency Choice"), choices = c("USD", "EUR", "SGD", "AUD", "GBP", "EUR", "JPY"), selected = "USD", multiple = FALSE),
+      selectInput("chosen", label = h3("Currency"), choices = c("USD", "EUR", "SGD", "AUD", "GBP", "EUR", "JPY"), selected = "USD", multiple = FALSE),
       radioButtons("type", label = "Buying/Selling", choices = c("Buying", "Selling"), selected = "Buying"),
       p("Predict the next 10 days price"),
       actionButton("predict", label = "Predict"),
@@ -18,7 +18,7 @@ shinyUI(fluidPage(
       p(strong("Data Set Info:"), "From", span("BNM API", style = "color:red"), "online"),
       p("Past 30 days of selected currency with MYR currency."),
       br(),
-      h3("Check the gold price"),
+      h3("Gold Price"),
       actionButton("check", label = "Check"),
       br(),
       br(),
