@@ -39,13 +39,15 @@ shinyServer(function(input, output){
     
     df <- df[order(df$date),]
     #head(df)
+    df$date <- as.Date(df$date)
     
-    p1 <- ggplot(df, aes_string(x="date", y=input$type, group =1)) + geom_line() + geom_point() + geom_smooth(method='lm',formula=y~x) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle(paste(as.character(df$currency[1]), "/MYR currency", sep = "")) +
-      theme(plot.title = element_text(hjust = 0.5))
-    ggplotly(p1) %>% layout(height = 350, width = 800)
-    
+    if (input$predict == "Yes"){
+      p1 <- ggplot(df, aes_string(x="date", y=input$type, group =1)) + geom_line() + geom_point() + stat_smooth(method='lm',fullrange = TRUE) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + xlim(df$date[1],df$date[length(df$date)]+days(10)) + ggtitle(paste(as.character(df$currency[1]), "/MYR currency", sep = "")) + theme(plot.title = element_text(hjust = 0.5))
+      ggplotly(p1, tooltip = c("date", input$type)) %>% layout(height = 350, width = 800)}
+    else {
+      p1 <- ggplot(df, aes_string(x="date", y=input$type, group =1)) + geom_line() + geom_point() + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle(paste(as.character(df$currency[1]), "/MYR currency", sep = "")) + theme(plot.title = element_text(hjust = 0.5))
+      ggplotly(p1, tooltip = c("date", input$type)) %>% layout(height = 350, width = 800)}
   })
-  
   
   gold_plot <- eventReactive(input$check, {
     runif(input$check)
