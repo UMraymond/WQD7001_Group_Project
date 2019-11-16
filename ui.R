@@ -12,7 +12,7 @@ shinyUI(fluidPage(
       selectInput("chosen", label = h3("Currency"), choices = c("USD", "EUR", "SGD", "AUD", "GBP", "EUR", "JPY"), selected = "USD", multiple = FALSE),
       radioButtons("type", label = "Buying/Selling", choices = c("Buying", "Selling"), selected = "Buying"),
       p("Predict the next 10 days price"),
-      actionButton("predict", label = "Predict"),
+      radioButtons("predict", label = "Prediction", choices = c("Yes", "No"), selected ="No"),
       br(),
       br(),
       p(strong("Data Set Info:"), "From", span("BNM API", style = "color:red"), "online"),
