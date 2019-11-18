@@ -4,11 +4,16 @@ library(shiny); library(shinythemes)
 library(tidyverse) ; library(httr) ; library(jsonlite); library(glue); library(ggplot2); library(plotly)
 require("httr")
 shinyUI(fluidPage(
-  theme = shinytheme("darkly"),
+  theme = shinytheme("cyborg"),
+  
   titlePanel(h1("Hello Shiny BNM API!")),
   sidebarLayout(
-    sidebarPanel(
-      
+    
+    sidebarPanel(width = 3,
+
+                 
+                 
+                 
       selectInput("chosen", label = h3("Currency"), choices = c("USD", "EUR", "SGD", "AUD", "GBP", "EUR", "JPY"), selected = "USD", multiple = FALSE),
       radioButtons("type", label = "Buying/Selling", choices = c("Buying", "Selling"), selected = "Buying"),
       p("Predict the next 10 days price"),
@@ -28,9 +33,14 @@ shinyUI(fluidPage(
       br()
     ),
     mainPanel(
-      plotlyOutput("currencyPlot"),
-      br(),
-      plotlyOutput("goldplot")
+      
+      tabsetPanel(type = "tabs",
+                  tabPanel("Currency and Gold Plot", plotlyOutput("currencyPlot"), plotlyOutput("goldplot")),
+                  tabPanel("Blacklisted Companies", DT::dataTableOutput("mytable")) 
+                  
+      )
+      
+
     )
   )
   

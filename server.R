@@ -3,10 +3,55 @@
 library(shiny)
 library(tidyverse) ; library(httr) ; library(jsonlite); library(glue); library(ggplot2); library(plotly)
 require("httr")
+library(lubridate)
+library(DT)
+# function t use below
+bnm_api <- function(path, ...) {
+  GET("https://api.bnm.gov.my",
+      path = glue("public{path}"),
+      ...,
+      accept("application/vnd.BNM.API.v1+json"),
+      user_agent("http://github.com/philip-khor/bnmr/")
+  ) -> resp
+  
+  parsed <- fromJSON(content(resp, "text", encoding = "UTF-8"))
+  
+  if (http_type(resp) != "application/json") {
+    stop("API did not return json", call. = FALSE)
+  }
+  
+  if (http_error(resp)) {
+    stop(
+      sprintf(
+        "BNM API request failed [%s]\n%s\n<%s>",
+        status_code(resp),
+        parsed$message,
+        parsed$documentation_url
+      ),
+      call. = TRUE
+    )
+  }
+  
+  structure(
+    list(
+      content = parsed,
+      path = path,
+      response = resp
+    ),
+    class = "bnm_api"
+  )
+}
+
+get_bnm_data <- function(path, ...) {
+  bnm_api(path, ...)[["content"]][["data"]]
+}
+
+consumer_alert <- function() get_bnm_data("/consumer-alert")
+
 
 shinyServer(function(input, output){
   output$currencyPlot <- renderPlotly({
-    
+    #gold_plot()
     x = as.numeric(format(Sys.Date(), "%m"))
     year = format(Sys.Date(), "%Y")
     currency_code = input$chosen
@@ -48,6 +93,7 @@ shinyServer(function(input, output){
       p1 <- ggplot(df, aes_string(x="date", y=input$type, group =1)) + geom_line() + geom_point() + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle(paste(as.character(df$currency[1]), "/MYR currency", sep = "")) + theme(plot.title = element_text(hjust = 0.5))
       ggplotly(p1, tooltip = c("date", input$type)) %>% layout(height = 350, width = 800)}
   })
+  
   
   gold_plot <- eventReactive(input$check, {
     runif(input$check)
@@ -93,6 +139,15 @@ shinyServer(function(input, output){
       theme(plot.title = element_text(hjust = 0.5))
     ggplotly(p2) %>% layout(height = 350, width = 800)
    
+  })
+  data1 <- consumer_alert()
+  
+  output$mytable = DT::renderDataTable({
+    DT::datatable(data1, rownames = FALSE, options = list(autoWidth = TRUE)) %>%
+      formatStyle(columns = c("name", "regisration_number", 
+                              "added_date", "websites"),
+                  target = c("cell", "row"), backgroundColor = "#000000") 
+    
   })
     
 })
