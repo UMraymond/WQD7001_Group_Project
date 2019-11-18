@@ -21,7 +21,7 @@ shinyUI(fluidPage(
       br(),
       br(),
       p(strong("Data Set Info:"), "From", span("BNM API", style = "color:red"), "online"),
-      p("Past 30 days of selected currency with MYR currency."),
+      #p("Past 30 days of selected currency with MYR currency."),
       br(),
       h3("Gold Price"),
       actionButton("check", label = "Check"),
