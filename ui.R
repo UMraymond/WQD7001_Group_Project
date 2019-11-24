@@ -6,7 +6,7 @@ require("httr")
 shinyUI(fluidPage(
   theme = shinytheme("cyborg"),
   
-  titlePanel(h1("Hello Shiny BNM API!")),
+  titlePanel(h1("WQD7001 Project")),
   sidebarLayout(
     
     sidebarPanel(width = 3,
@@ -22,6 +22,8 @@ shinyUI(fluidPage(
       br(),
       p(strong("Data Set Info:"), "From", span("BNM API", style = "color:red"), "online"),
       #p("Past 30 days of selected currency with MYR currency."),
+      p("Created by"),
+      p("WQD190007, WQD190025, WQD190026, WQD190044"),
       br(),
       h3("Gold Price"),
       actionButton("check", label = "Check"),
