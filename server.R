@@ -135,6 +135,7 @@ shinyServer(function(input, output){
   
     df_gold <- df_gold[order(df_gold$date),]
     #head(df)
+    df_gold$date <- as.Date(df_gold$date)
     p2 <- ggplot(df_gold, aes_string(x="date", y=paste0(input$gold, "_in_", input$gram), group =1)) + geom_line() + geom_point() + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Gold Price (MYR)") +
       theme(plot.title = element_text(hjust = 0.5))
     ggplotly(p2) %>% layout(height = 350, width = 800)
