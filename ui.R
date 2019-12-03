@@ -6,7 +6,7 @@ require("httr")
 shinyUI(fluidPage(
   theme = shinytheme("cerulean"),
   
-  titlePanel(h1("WQD7001 Project")),
+  titlePanel(h1("Exchange Rates, Gold Prices, Blacklisted Company Checker")),
   sidebarLayout(
     
     sidebarPanel(width = 3,
