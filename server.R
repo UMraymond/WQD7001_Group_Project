@@ -146,7 +146,7 @@ shinyServer(function(input, output){
     DT::datatable(data1, rownames = FALSE, options = list(autoWidth = TRUE)) %>%
       formatStyle(columns = c("name", "regisration_number", 
                               "added_date", "websites"),
-                  target = c("cell", "row"), backgroundColor = "#000000") 
+                  target = c("cell", "row"), backgroundColor = "#FFFFFF") 
     
   })
     
